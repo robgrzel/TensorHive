@@ -1,5 +1,5 @@
 from tensorhive.models.reservation_event.ReservationEventModel import ReservationEventModel
-from tensorhive.models.user.UserModel import UserModel
+from tensorhive.models.user import UserModel
 from connexion import NoContent
 from flask import jsonify
 from datetime import datetime

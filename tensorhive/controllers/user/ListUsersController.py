@@ -1,4 +1,4 @@
-from tensorhive.models.user.UserModel import UserModel
+from tensorhive.models.user import UserModel
 
 
 class ListUsersController():
