@@ -32,6 +32,10 @@ paths:
           description: 'Not registered due to an error.'
   /reservations:
     get:
+      parameters:
+        - in: query
+          name: nodeId
+          type: integer
       responses:
         '200':
           description: 'All fetched with success.'
