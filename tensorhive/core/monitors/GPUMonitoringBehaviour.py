@@ -25,6 +25,60 @@ class GPUMonitoringBehaviour(MonitoringBehaviour):
     def update(self, group_connection) -> Dict:
         metrics = self._current_metrics(group_connection)  # type: Dict
         processes = self._current_processes(group_connection)  # type: Dict
+        
+        #Mock 
+        metrics = {
+            "DGX_STATION_HOST_MOCK": {
+                # DGX Station Mock
+                "GPU": [
+                    {"name": "Tesla V100 GPU0"},
+                    {"name": "Tesla V100 GPU1"},
+                    {"name": "Tesla V100 GPU2"},
+                    {"name": "Tesla V100 GPU3"}
+                ]
+            },
+            "GALILEO_MOCK": {
+                "GPU": [
+                    {"name": "TITAN X 12 GB"},
+                    {"name": "GeForce GTX 750 Ti"}
+                ]
+            }
+        }
+
+
+        #Mock
+        processes = {
+            'DGX_STATION_HOST_MOCK': {
+                'GPU': {
+                    'processes': [
+                        {'gpu': 0, 'pid': 1,'command': 'DGX_COMMAND_A'},
+                        {'gpu': 0, 'pid': 2,'command': 'DGX_COMMAND_B_'},
+                        {'gpu': 0, 'pid': 3,'command': 'DGX_COMMAND_C'},
+
+                        {'gpu': 1, 'pid': 11,'command': 'DGX_COMMAND_D'},
+                        {'gpu': 1, 'pid': 12,'command': 'DGX_COMMAND_E'},
+                        {'gpu': 1, 'pid': 13,'command': 'DGX_COMMAND_F'},
+
+                        {'gpu': 2, 'pid': 111,'command': 'DGX_COMMAND_G'},
+                        {'gpu': 2, 'pid': 112,'command': 'DGX_COMMAND_H'},
+                        {'gpu': 2, 'pid': 113,'command': 'DGX_COMMAND_I'},
+
+                        {'gpu': 3, 'pid': 1111,'command': 'DGX_COMMAND_J'},
+                        {'gpu': 3, 'pid': 1112,'command': 'DGX_COMMAND_K'},
+                        {'gpu': 3, 'pid': 1113,'command': 'DGX_COMMAND_L'},
+                    ]    
+                }
+            },
+            'GALILEO_MOCK': {
+                'GPU': {
+                    'processes': [
+                        {'gpu': 0, 'pid': 2221,'command': 'GALILEO_COMMAND_A'},
+                        {'gpu': 0, 'pid': 2222,'command': 'GALILEO_COMMAND_B'},
+                        # No processes on gpu 1
+                    ]    
+                }
+            }
+        }
         result = self._combine_outputs(metrics, processes)  # type: Dict
         return result
 
