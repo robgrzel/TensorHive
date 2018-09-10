@@ -46,6 +46,7 @@ setup(
         'connexion', 
         'flask_cors', 
         'gunicorn', 
+        'tornado',
         'coloredlogs'
     ],
     zip_safe=False

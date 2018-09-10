@@ -50,6 +50,7 @@ def setup_logging(log_level):
     logging.getLogger('werkzeug').setLevel(logging.CRITICAL)
     logging.getLogger('connexion').setLevel(logging.CRITICAL)
     logging.getLogger('swagger_spec_validator').setLevel(logging.CRITICAL)
+    logging.getLogger('tornado').setLevel(log_level)
 
     # May want to disable logging completely
     # logging.getLogger('werkzeug').disabled = True
