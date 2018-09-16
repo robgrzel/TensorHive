@@ -1,25 +1,31 @@
 from setuptools import setup, find_packages
+from tensorhive.core.utils.colors import red, orange, green
 import tensorhive
 
 
 def copy_configuration_files():
+    '''
+    Copies `main_config.ini` and `hosts_config.ini` to `~/.config/TensorHive/`.
+    Prints are only visible when `pip install ... --verbose` (it's handled by pip itself)
+    '''
     import shutil
     from pathlib import PosixPath
     target_dir = PosixPath.home() / '.config/TensorHive'
-    # destination is given explicitely, just in case we'd want to rename file during the installation process
+    # Destination is given explicitely, just in case we'd want to rename file during the installation process
     hosts_config_path = {'src': 'hosts_config.ini', 'dst': str(target_dir / 'hosts_config.ini')}
     config_path = {'src': 'main_config.ini', 'dst': str(target_dir / 'main_config.ini')}
     
     try:
         target_dir.mkdir(parents=True, exist_ok=True)
         shutil.copy(hosts_config_path['src'], hosts_config_path['dst'])
-        shutil.copy(config_path['src'], config_path['dst'])
-        # FIXME Prints are only visible with `pip install foobar --verbose`
-        print('Configuration .ini files copied to {}'.format(target_dir))
-    except:
-        print('Unable to copy configuration files to {}'.format(target_dir))
+        shutil.copy(config_path['src'], config_path['dst'])    
 
-# TODO Add platform and license
+        print(green('Configuration .ini files copied to {}'.format(target_dir)))
+        print(orange('Please, remember to customize hosts_config.ini before launching TensorHive!'))
+    except:
+        print(red('Unable to copy configuration files to {}'.format(target_dir)))
+
+
 setup(
     name = 'tensorhive',
     version = tensorhive.__version__,
