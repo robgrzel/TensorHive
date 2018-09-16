@@ -37,6 +37,9 @@ setup(
             'tensorhive = tensorhive.__main__:main'
         ],
     },
+    # TODO @roscisz Add classifiers https://pypi.org/pypi?%3Aaction=list_classifiers
+    # TODO @roscisz Add `platforms` argument
+    # TODO @roscisz Validate description correctness
     description = 'Lightweight computing resource management tool for executing distributed TensorFlow programs',
     author = 'Pawel Rosciszewski, Michał Martyniak, Filip Schodowski, Tomasz Menet',
     author_email = 'pawel.rosciszewski@pg.edu.pl',
