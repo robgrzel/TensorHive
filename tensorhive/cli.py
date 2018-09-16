@@ -32,7 +32,7 @@ def print_version(ctx, param, value):
     ctx.exit()
 
 
-def setup_logging(log_level):
+def setup_logging(log_level: int):
     DEFAULT_LEVEL = logging.INFO
     FORMAT = '%(levelname)-8s | %(asctime)s | %(threadName)-30s | MSG: %(message)-79s | FROM: %(name)s'
 
@@ -57,14 +57,14 @@ def setup_logging(log_level):
     # May want to disable logging completely
     # logging.getLogger('werkzeug').disabled = True
 
-    # Colored logs can be easily disabled by commenting this single line
     import coloredlogs
     coloredlogs.install(level=log_level, fmt=FORMAT)
+
 
 def log_level_mapping(ctx, param, value: str) -> int:
     '''
     Callback function which takes care of mapping
-    from cli string param to int log level
+    from CLI string param to int log level
     '''
     if value is None:
         return logging.INFO

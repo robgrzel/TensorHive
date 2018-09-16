@@ -60,4 +60,5 @@ setup(
     zip_safe=False
 )
 
+# Post install
 copy_configuration_files()

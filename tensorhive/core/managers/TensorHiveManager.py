@@ -20,7 +20,7 @@ log = logging.getLogger(__name__)
 
 
 class TensorHiveManager(metaclass=Singleton):
-    """Heart of the whole engine"""
+    '''Heart of the whole engine'''
 
     def __init__(self):
         super().__init__()
@@ -30,6 +30,15 @@ class TensorHiveManager(metaclass=Singleton):
         self.connection_manager = SSHConnectionManager(config=SSH.AVAILABLE_NODES)
         self.service_manager = None
 
+
+    def init(self):
+        log.info('[⚙] Initializing services...')
+        self.service_manager.start_all_services()
+
+
+    def shutdown(self):
+        log.info('[⚙] Shutting down all services...')
+        self.service_manager.shutdown_all_services()
 
     @staticmethod
     def instantiate_services_from_config() -> List[Service]:
@@ -64,13 +73,3 @@ class TensorHiveManager(metaclass=Singleton):
         self.service_manager = ServiceManager(services=services,
                                               infrastructure_manager=self.infrastructure_manager,
                                               connection_manager=self.connection_manager)
-
-
-    def init(self):
-        log.info('[⚙] Initializing services...'.format(self.__class__.__name__))
-        self.service_manager.start_all_services()
-
-
-    def shutdown(self):
-        log.info('[⚙] Shutting down all services...')
-        self.service_manager.shutdown_all_services()

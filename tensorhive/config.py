@@ -59,6 +59,7 @@ class SSH:
             }
         return result
 
+
     def proxy_config_to_dict(path: str) -> Optional[Dict]:
         '''Parses [proxy_tunneling] section'''
         config = ConfigLoader.load(path, displayed_title='proxy')
