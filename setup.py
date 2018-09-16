@@ -44,7 +44,7 @@ setup(
     author = 'Pawel Rosciszewski, Michał Martyniak, Filip Schodowski, Tomasz Menet',
     author_email = 'pawel.rosciszewski@pg.edu.pl',
     url = 'https://github.com/roscisz/TensorHive',
-    download_url = 'https://github.com/roscisz/TensorHive/archive/0.1.1.tar.gz',
+    download_url = 'https://github.com/roscisz/TensorHive/archive/{version}.tar.gz'.format(version=tensorhive.__version__),
     keywords = 'distributed machine learning tensorflow resource management',
     install_requires=[
         'parallel-ssh', 
