@@ -4,18 +4,19 @@ import tensorhive
 import logging
 import signal
 import sys
+
 '''
 Current CLI Structure: (update regularly)
 
 tensorhive 
 ├── -v/--version
 ├── --help
-├── run
-|   ├── --help
-|   └── --log-level <level> (e.g. debug, info, warning, error, critical)
-└── db
-    └── init
+└──run
+    ├── --help
+    └── --log-level <level> or -l <level> (e.g. debug, info, warning, error, critical)
 '''
+
+
 AVAILABLE_LOG_LEVELS = {
     'debug': logging.DEBUG,
     'info': logging.INFO,
