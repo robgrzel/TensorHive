@@ -27,6 +27,7 @@ AVAILABLE_LOG_LEVELS = {
 
 
 def print_version(ctx, param, value):
+    '''Executed on `tensorhive --version`'''
     if not value or ctx.resilient_parsing:
         return
     click.echo('TensorHive {ver}'.format(ver=tensorhive.__version__))

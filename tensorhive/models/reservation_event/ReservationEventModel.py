@@ -26,6 +26,7 @@ class ReservationEventModel(Base):
     __server_timezone = '+00:00'
     __min_reservation_time = datetime.timedelta(minutes=30)
 
+
     def __repr__(self):
         return '<ReservationEvent id={id}, user={user}, \n \
                 title={title}, \n \
@@ -49,6 +50,7 @@ class ReservationEventModel(Base):
         current_time = datetime.datetime.utcnow()
         return cls.query.filter(and_(cls.start <= current_time, current_time <= cls.end)).all()
 
+
     def save_to_db(self):
         try:
             self._parse_client_time_format()
@@ -68,15 +70,15 @@ class ReservationEventModel(Base):
             return False
         return True
 
+
     def _validate_user_existence(self):
         if not UserModel.find_by_id(self.user_id):
-            raise AssertionError(
-                'User with id={} does not exist'.format(self.user_id))
+            raise AssertionError('User with id={} does not exist'.format(self.user_id))
+
 
     def _validate_time_range(self):
         if not isinstance(self.start, datetime.date) or not isinstance(self.end, datetime.date):
-            raise TypeError(
-                '\'start\' and \'end\' must be of type datetime.datetime')
+            raise TypeError('\'start\' and \'end\' must be of type datetime.datetime')
 
         if self.start > self.end:
             raise AssertionError('Invalid time range (start >= end)')
@@ -85,10 +87,15 @@ class ReservationEventModel(Base):
             raise AssertionError('Reservation time is shorter than {}'.format(
                 self.__min_reservation_time))
 
+
     @classmethod
     def collision_found(cls, start, end, resource_id):
+        '''
+        Tries to find such two events that overlap and 
+        concern the same resource simultaneously.
+        '''
         return cls.query.filter(
-            # Two events overlap and concern the same resource
+            # Two reservations are overlapping for the same resource
             and_(
                 # There are no such two events that overlap
                 not_(
@@ -99,15 +106,18 @@ class ReservationEventModel(Base):
                 cls.resource_id == resource_id)
             ).first()
 
+
     def _check_for_collisions(self):
-        '''Assures that there are no other reservations for the same resource in that time'''
+        '''Makes sure that new reservation record won't collide with others'''
         if self.collision_found(self.start, self.end, self.resource_id):
             raise AssertionError('{uuid} is already reserved from {start} to {end}'.format(
                 uuid=self.resource_id,
                 start=self.start,
                 end=self.end))
 
+
     def _parse_client_time_format(self):
+        '''Replaces string datetime with native datetime object'''
         if isinstance(self.start, str) and isinstance(self.start, str): 
             client_datetime_format = '%Y-%m-%dT%H:%M:%S.%fZ'
             parsed_datetime = lambda t: datetime.datetime.strptime(t, client_datetime_format)
@@ -117,31 +127,39 @@ class ReservationEventModel(Base):
             except ValueError:
                 raise ValueError('Datetime parsing error')
 
+
     @classmethod
     def find_by_id(cls, id):
         return cls.query.get(id)
+
 
     @classmethod
     def return_all(cls):
         return cls.query.all()
 
+
     @classmethod
     def filter_by_uuids_and_time_range(cls, uuids, start, end):
+        '''Finds all events between <start, end> that issue the same GPU.'''
         match_uuids = cls.resource_id.in_(uuids)
         match_after_start = cls.start <= end
         match_before_end = start <= cls.end
         return cls.query.filter(and_(match_uuids, match_after_start, match_before_end)).all()
 
+
     @classmethod
     def delete_by_id(cls, id):
         try:
             num_rows_deleted = cls.query.filter_by(id=id).delete()
-            db_session.commit()
+            if num_rows_deleted > 0:
+                db_session.commit()
+                return True
+            else:
+                return False
         except:
             db_session.rollback()
             return False
-        # Check if any row were affected by deletion (otherwise -> not found)
-        return True if num_rows_deleted > 0 else False
+
 
     @property
     def as_dict(self):
@@ -160,9 +178,3 @@ class ReservationEventModel(Base):
                     createdAt=self.created_at.strftime(
                         self.__display_datetime_format)
                     )
-    # TODO We may need deserialzer
-
-    # Not implemented yet
-    # @classmethod
-    # def get_count(cls):
-    #     pass
